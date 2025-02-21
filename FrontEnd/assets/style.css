@@ -214,7 +214,7 @@ input{
 	height: 2.5rem;
 }
 .noLogin{
-	display: flex;
+	display: none;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
@@ -225,4 +225,7 @@ input{
 }
 .noLogin a{
 	text-decoration: underline;
+}
+.login-pressed{
+	display: flex;
 }
