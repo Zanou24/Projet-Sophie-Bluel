@@ -93,6 +93,7 @@ nav ul {
 nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
+	cursor: pointer;
 }
 
 li:hover {
@@ -218,7 +219,6 @@ input{
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-
 }
 .noLogin h2{
 	margin: 5rem 0 3rem 0;
@@ -228,4 +228,91 @@ input{
 }
 .login-pressed{
 	display: flex;
+}
+#background-modale{
+	position: fixed;
+	display: none;
+	justify-content: center;
+	align-items: center;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: #0004;
+}
+#modale{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 1rem;
+	border-radius: 1rem;
+	box-shadow: 0 0 5px #666;
+	background-color: white;
+	min-width: 40rem;
+	min-height: 20rem;
+}
+.top-actions{
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+}
+.top-actions button{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: none;
+	background-color: transparent;
+	cursor: pointer;
+	border-radius: 100%;
+	font-size: 1.2rem;
+	min-width: 2rem;
+	min-height: 2rem;
+}
+.top-actions button:hover{
+	background-color: #eee;
+
+}
+.separator-modale{
+	width: 100%;
+	border-top: solid 2px #888;
+	margin: 1rem 0;
+}
+.content-modale{
+	box-sizing: border-box;
+	max-width: 40rem;
+	width: 100%;
+	padding: 0 5rem 3rem;
+}
+#gallery-modale{
+	display: flex;	
+	justify-content: space-around;
+	align-items: center;
+	flex-wrap: wrap;
+	width: 100%;
+	row-gap: 30px;
+	padding: 3rem 0;
+}
+.img-modale{
+	width: 17%;
+	height: 110px;
+	position: relative;
+	background-size: cover;
+
+
+}
+.img-modale button{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	border: none;
+	border-radius: 10%;
+	background-color: black;
+	padding: 5px;
+	cursor: pointer;
+}
+.fa-trash-can{
+	color: #fff;
 }
