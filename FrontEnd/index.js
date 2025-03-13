@@ -17,13 +17,20 @@ const body = document.querySelector('body')
 const modale = document.getElementById('background-modale')
 const contentModale = document.getElementById('modale')
 const modifyGallery = document.getElementById('gallery-modale-modify')
-let token = null;
-
+const editMode = document.getElementById('editMode')
 function whenLogged() {
     displayBtnFilters(false)
+    editMode.innerHTML = `
+        <div class="edit-mode">
+	    <p><i class="fa-regular fa-pen-to-square"></i> Mode édition</p>
+        </div>
+    `
+    modifyGallery.style.display = "inline"
 }
 function whenUnlogged() {
     displayBtnFilters(true)
+    editMode.innerHTML = ""
+    modifyGallery.style.display = "none"
 }
 function isLogged() { return !!auth.getToken() }
 function refreshLoginLink() {
@@ -64,14 +71,22 @@ function getImageModale() {
             for (const button of listDeleteBTN) {
                 button.addEventListener("click", () => {
                     const id = button.getAttribute("data-id")
-                    api.Delete(id).then(data => { console.log(`Client ${id} supprimé`); getImageModale() })
+                    api.Delete(id).then(data => {
+                        console.log(`Client ${id} supprimé`)
+                        getImageModale()
+                        refreshList()
+                    })
                 })
             }
         })
 
 }
 function deleteWork(id) {
-    api.Delete(id).then(data => { console.log(`Client ${id} supprimé`); getImageModale() })
+    api.Delete(id).then(data => {
+        console.log(`Client ${id} supprimé`)
+        getImageModale()
+        refreshList()
+    })
 }
 function displayModale(display) {
     modale.style.display = display ? "flex" : "none"
@@ -98,8 +113,12 @@ form.addEventListener('submit', async (event) => {
     const email = emailInput.value;
     const password = passwordInput.value;
 
+    if (!email || !password) {
+        alert("Veuillez remplir tous les champs");
+        return;
+    }
+
     try {
-        auth.login(email, password)
         const data = await auth.login(email, password);
         console.log(data)
         if (data.token != undefined) {
@@ -108,6 +127,8 @@ form.addEventListener('submit', async (event) => {
             loginMenu.classList.remove('login-pressed')
             refreshLoginLink()
             whenLogged()
+        } else {
+            alert("Adresse mail ou mot de passe incorrect")
         }
     } catch (error) {
         console.log(error);
@@ -133,8 +154,6 @@ addImage.addEventListener("click", () => {
     const ModaleDiv = document.createElement("div")
     ModaleDiv.id = "modale"
 
-
-    // boutons de gestion de la modale
     const topActions = document.createElement("div")
     topActions.classList.add("top-actions")
     const backButton = document.createElement("button")
@@ -154,16 +173,30 @@ addImage.addEventListener("click", () => {
     const ModaleForm = document.createElement("form")
     ModaleForm.classList.add("content-modale")
     const ModaleInput = `
-    <input type="file" accept="image/*" id="input-image">
-    <label for="titre">Titre</label>
-	<input type="text" name="titre" id="titre">
-    <label for="categorie">Catégorie</label>
-    <select name="categorie" id="categorie">
-    </select>
-    <input type="submit" id="submit-new-work" value="Valider">
+    <legend>Ajout photo</legend>
+    <label for="input-image">
+        <input type="file" accept="image/*" id="input-image" style="display: none;">
+        <img id="preview-image" class="img-post-works">
+        <div id="remove-text">
+        <i class="fa-regular fa-image"></i>
+        <a>+ Ajouter image</a>
+        <p>jpg, png : 4mo max</p>
+        </div>
+    </label>
+    <div style="form-post-works">
+        <label for="titre">Titre</label>
+        <input type="text" name="titre" id="titre">
+    </div>
+    <div style="form-post-works">
+        <label for="categorie">Catégorie</label>
+        <select name="categorie" id="categorie">
+            <option value=""></option>
+        </select>
+    </div>
+    <input type="submit" class="button" id="submit-new-work" value="Valider">
     `
 
-    ModaleForm.classList.add("logPage")
+    ModaleForm.classList.add("image-modale")
     ModaleForm.innerHTML += ModaleInput
     ModaleDiv.appendChild(topActions)
     ModaleDiv.appendChild(ModaleForm)
@@ -175,6 +208,24 @@ addImage.addEventListener("click", () => {
         body.removeChild(ModaleDivContent);
     });
     body.appendChild(ModaleDivContent)
+
+    const inputImage = document.getElementById("input-image")
+    const previewImage = document.getElementById("preview-image")
+    const removeText = document.getElementById("remove-text")
+
+    inputImage.addEventListener("change", (event) => {
+        const file = event.target.files[0]
+        if (file) {
+            const reader = new FileReader()
+            reader.onload = (e) => {
+                previewImage.src = e.target.result
+                previewImage.style.display = "block"
+                removeText.style.display = "none"
+            }
+            reader.readAsDataURL(file)
+        }
+    })
+
     api.getCategories().then((res) => {
         const selectCategory = document.getElementById("categorie")
         for (const category of res) {
@@ -185,17 +236,22 @@ addImage.addEventListener("click", () => {
             selectCategory.appendChild(option)
         }
     })
+
     const submitNewWork = document.getElementById("submit-new-work")
     submitNewWork.addEventListener("click", (event) => {
         event.preventDefault()
         const title = document.getElementById("titre").value
         const category = document.getElementById("categorie").value
-        const image = document.getElementById("input-image").files[0]
-        console.log(title, category, image)
-        api.createWork(title, category, image).then((res) => {
-            getImageModale()
-            refreshList()
-        })
+        const image = inputImage.files[0]
+        if (title && category && image) {
+            api.createWork(title, category, image).then((res) => {
+                getImageModale()
+                refreshList()
+                body.removeChild(ModaleDivContent)
+            })
+        } else {
+            alert("Veuillez remplir tous les champs")
+        }
     })
 })
 refreshLoginLink()

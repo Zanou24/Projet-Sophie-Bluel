@@ -12,7 +12,7 @@
 	<script src="https://kit.fontawesome.com/a0314b6648.js" crossorigin="anonymous"></script>
 </head>
 <body>
-
+	<div id="editMode"></div>
 <header>
 	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 	<nav>
@@ -38,7 +38,7 @@
 				<input type="password" name="mdp" id="mdp">
 			</div>
 			</br>
-			<input type="submit" value="Se connecter" class="sub">
+			<input type="submit" class="submit button" value="Se connecter" class="sub">
 		</form>
 		<a>Mot de passe oublié</a>
 	</section>
@@ -46,18 +46,18 @@
 <div id="background-modale">
 	<div id="modale">
 		<div class="top-actions">
-			<button></button>
+			
 			<button id="close-modale">✖</button>
 		</div>
 		<div class="content-modale">
-			<h2>Galerie photo</h2>
+			<legend>Galerie photo</legend>
 			<div id="gallery-modale">
 				
 			</div>
 			<div class="separator-modale">
 		
 			</div>
-			<button id="add-image">Ajouter une photo</button>
+			<button id="add-image" class="button">Ajouter une photo</button>
 		</div>
 	</div>
 </div>
@@ -81,12 +81,13 @@
 		</article>
 	</section>
 	<section id="portfolio">
-		<h2>Mes Projets<button id="gallery-modale-modify">modifier</button></h2>
-		<div id="btn-filters">
-			<ul id="filters">
-				<li><button id="tous">Tous</button></li>
-			</ul>
-		</div>
+			<h2 id="projets">Mes Projets <button id="gallery-modale-modify" class="display"> <i class="fa-regular fa-pen-to-square"></i> modifier</button></h2>
+			
+			<div id="btn-filters">
+				<ul id="filters" class="filters">
+					<li><button id="tous">Tous</button></li>
+				</ul>
+			</div>
 		<div class="gallery"></div>
 	</section>
 	<section id="contact">
@@ -96,10 +97,10 @@
 			<label for="name">Nom</label>
 			<input type="text" name="name" id="name">
 			<label for="email">Email</label>
-			<input type="email" name="email" id="email">
+			<input type="email" name="email" id="eemail">
 			<label for="message">Message</label>
 			<textarea name="message" id="message" cols="30" rows="10"></textarea>
-			<input type="submit" value="Envoyer">
+			<input type="submit" class="submit" value="Envoyer">
 		</form>
 	</section>
 </main>
